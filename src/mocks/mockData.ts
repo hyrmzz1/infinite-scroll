@@ -719,7 +719,9 @@ export const MOCK_DATA: MockData[] = [
 const PER_PAGE = 10;
 
 // 페이지는 1부터 시작
-export const getMockData = (pageNum: number) => {
+export const getMockData = (
+  pageNum: number
+): Promise<{ datas: MockData[]; isEnd: boolean }> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const datas: MockData[] = MOCK_DATA.slice(

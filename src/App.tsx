@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { getMockData, MockData } from "./mocks/mockData";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [products, setProducts] = useState<MockData[]>([]); // 불러온 데이터 저장
+  const [page, setPage] = useState(0); // 현재 페이지
+  const [loading, setLoading] = useState(false);
+  const [hasNextPage, setHasNextPage] = useState(false); // 다음 페이지 없으면 무한 스크롤 호출 X
+
+  const fetchProducts = async () => {
+    setLoading(true); // 데이터 불러오는 동안 로딩 상태 유지
+
+    const { datas, isEnd } = await getMockData(page); // page에 해당하는 데이터, 다음 페이지 유무 받아오기
+
+    setProducts((prevProducts) => [...prevProducts, ...datas]); // 기존 데이터에 새로운 페이지 데이터 이어 붙이기
+    setHasNextPage(!isEnd); // 다음 페이지 유무 상태 설정
+    setLoading(false); // 데이터 페칭 및 처리 완료, 로딩 상태 종료
+  };
+
+  // page 바뀔 때마다 fetchProducts 함수 호출
+  useEffect(() => {
+    fetchProducts();
+  }, [page]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {/* 아이템 */}
+      {/* 로딩 UI */}
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
