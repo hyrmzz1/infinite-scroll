@@ -16,13 +16,18 @@ const App = () => {
     setLoading(true); // 데이터 불러오는 동안 로딩 상태 유지
     // console.log("로딩 시작");
 
-    const { datas, isEnd } = await getMockData(page); // page에 해당하는 데이터, 다음 페이지 유무 받아오기
+    try {
+      const { datas, isEnd } = await getMockData(page); // page에 해당하는 데이터, 다음 페이지 유무 받아오기
 
-    setProducts((prevProducts) => [...prevProducts, ...datas]); // 기존 데이터에 새로운 페이지 데이터 이어 붙이기
-    setPageParams((prev) => [...prev, page]); // 호출한 페이지 번호 저장
-    setHasNextPage(!isEnd); // 다음 페이지 유무 상태 설정
-    setLoading(false); // 데이터 페칭 및 처리 완료, 로딩 상태 종료
-    // console.log("로딩 끝");
+      setProducts((prevProducts) => [...prevProducts, ...datas]); // 기존 데이터에 새로운 페이지 데이터 이어 붙이기
+      setPageParams((prev) => [...prev, page]); // 호출한 페이지 번호 저장
+      setHasNextPage(!isEnd); // 다음 페이지 유무 상태 설정
+      // console.log("로딩 끝");
+    } catch (error) {
+      setHasNextPage(false);
+    } finally {
+      setLoading(false); // 데이터 페칭 및 처리 완료 이후 또는 에러 발생시 로딩 상태 종료
+    }
   };
 
   // page 바뀔 때마다 fetchProducts 함수 호출
@@ -61,7 +66,7 @@ const App = () => {
         <ProductCard product={elem} />
       ))}
 
-      <div ref={observerRef}>Load more</div>
+      {hasNextPage && <div ref={observerRef}>Load more</div>}
     </>
   );
 };
