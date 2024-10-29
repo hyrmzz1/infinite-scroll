@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getMockData, MockData } from "./mocks/mockData";
 import ProductCard from "./components/ProductCard";
+import { PacmanLoader } from "react-spinners";
 
 const App = () => {
   const [products, setProducts] = useState<MockData[]>([]); // 불러온 데이터 저장
@@ -61,13 +62,20 @@ const App = () => {
   }, [hasNextPage, loading]);
 
   return (
-    <>
-      {products.map((elem) => (
-        <ProductCard product={elem} />
-      ))}
+    <main className="flex flex-col items-center py-10">
+      <p className="text-2xl font-extrabold">Product List</p>
+      <div className="grid grid-cols-3 gap-4 my-10">
+        {products.map((elem) => (
+          <ProductCard product={elem} key={elem.productId} />
+        ))}
+      </div>
 
-      {hasNextPage && <div ref={observerRef}>Load more</div>}
-    </>
+      {hasNextPage && (
+        <div ref={observerRef}>
+          <PacmanLoader speedMultiplier={0.75} size={20} />
+        </div>
+      )}
+    </main>
   );
 };
 
