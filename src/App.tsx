@@ -5,7 +5,7 @@ import { PacmanLoader } from "react-spinners";
 
 const App = () => {
   const [products, setProducts] = useState<MockData[]>([]); // 불러온 데이터 저장
-  let [totalPrice, setTotalPrice] = useState(0); // 불러온 데이터 price 총 합
+  const [totalPrice, setTotalPrice] = useState(0); // 불러온 데이터 price 총 합
   const [page, setPage] = useState(0); // 현재 페이지
   const [loading, setLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false); // 다음 페이지 없으면 무한 스크롤 호출 X
@@ -29,10 +29,10 @@ const App = () => {
 
       setPageParams((prev) => [...prev, page]); // 호출한 페이지 번호 저장
       setHasNextPage(!isEnd); // 다음 페이지 유무 상태 설정
-      // console.log("로딩 끝");
     } catch (error) {
       setHasNextPage(false);
     } finally {
+      // console.log("로딩 끝");
       setLoading(false); // 데이터 페칭 및 처리 완료 이후 또는 에러 발생시 로딩 상태 종료
     }
   };
@@ -44,7 +44,7 @@ const App = () => {
   }, [page]);
 
   useEffect(() => {
-    if (hasNextPage && !loading) return;
+    if (!hasNextPage || loading) return;
 
     // observerRef 요소가 뷰포트에 들어왔는지 감지
     const observer = new IntersectionObserver((entries) => {
