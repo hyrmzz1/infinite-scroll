@@ -71,7 +71,7 @@ const App = () => {
   return (
     <main className="flex flex-col items-center py-10">
       <p className="text-2xl font-extrabold">Product List</p>
-      <div className="grid grid-cols-3 gap-4 my-10">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-10">
         {products.map((elem) => (
           <ProductCard product={elem} key={elem.productId} />
         ))}
