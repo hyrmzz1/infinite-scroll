@@ -44,13 +44,14 @@ const App = () => {
   }, [page]);
 
   useEffect(() => {
+    if (hasNextPage && !loading) return;
+
     // observerRef 요소가 뷰포트에 들어왔는지 감지
     const observer = new IntersectionObserver((entries) => {
       const firstEntry = entries[0]; // 관찰 중인 첫 번째 요소
 
       // 요소가 화면에 들어왔을 때 동작
-      // !loading 조건 통해 중복 로딩 방지 (조건 없으면 "로딩 끝" 로그 중복으로 찍힘)
-      if (firstEntry.isIntersecting && hasNextPage && !loading) {
+      if (firstEntry.isIntersecting) {
         setPage((prevPage) => prevPage + 1); // 다음 페이지 설정
       }
     });
