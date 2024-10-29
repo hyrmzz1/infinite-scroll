@@ -5,6 +5,7 @@ import { PacmanLoader } from "react-spinners";
 
 const App = () => {
   const [products, setProducts] = useState<MockData[]>([]); // 불러온 데이터 저장
+  let [totalPrice, setTotalPrice] = useState(0); // 불러온 데이터 price 총 합
   const [page, setPage] = useState(0); // 현재 페이지
   const [loading, setLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false); // 다음 페이지 없으면 무한 스크롤 호출 X
@@ -21,6 +22,11 @@ const App = () => {
       const { datas, isEnd } = await getMockData(page); // page에 해당하는 데이터, 다음 페이지 유무 받아오기
 
       setProducts((prevProducts) => [...prevProducts, ...datas]); // 기존 데이터에 새로운 페이지 데이터 이어 붙이기
+
+      // 금액 합계에 새로운 페이지 데이터들의 금액 추가
+      const newTotalPrice = datas.reduce((acc, curr) => acc + curr.price, 0);
+      setTotalPrice((prevTotal) => prevTotal + newTotalPrice);
+
       setPageParams((prev) => [...prev, page]); // 호출한 페이지 번호 저장
       setHasNextPage(!isEnd); // 다음 페이지 유무 상태 설정
       // console.log("로딩 끝");
@@ -70,8 +76,12 @@ const App = () => {
         ))}
       </div>
 
+      <p className="font-bold text-lg">
+        Total Price: ${totalPrice.toLocaleString()}
+      </p>
+
       {hasNextPage && (
-        <div ref={observerRef}>
+        <div ref={observerRef} className="mt-5">
           <PacmanLoader speedMultiplier={0.75} size={20} />
         </div>
       )}
