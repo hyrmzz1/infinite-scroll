@@ -71,21 +71,22 @@ const App = () => {
   return (
     <main className="flex flex-col items-center py-10">
       <p className="text-2xl font-extrabold">Product List</p>
+
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-10">
         {products.map((elem) => (
           <ProductCard product={elem} key={elem.productId} />
         ))}
       </div>
 
-      <p className="font-bold text-lg">
+      <p className="font-bold text-lg mb-10">
         Total Price: ${totalPrice.toLocaleString()}
       </p>
 
-      {hasNextPage && (
-        <div ref={observerRef} className="mt-5">
+      {(loading && products.length === 0) || hasNextPage ? (
+        <div ref={observerRef}>
           <PacmanLoader speedMultiplier={0.75} size={20} />
         </div>
-      )}
+      ) : null}
     </main>
   );
 };
